@@ -1,0 +1,97 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.openapitools:openapi-generator-gradle-plugin:4.2.1'
+    }
+}
+
+plugins {
+    id 'application'
+    id 'java'
+    id 'org.openapi.generator' version '4.2.1'
+    id 'org.springframework.boot' version '2.2.1.RELEASE'
+}
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
+openApiMeta {
+    generatorName = 'Sample'
+    packageName = 'org.openapitools'
+    outputFolder = "${buildDir}/meta"
+}
+
+openApiValidate {
+    inputSpec = "${rootDir}/openapi.yaml"
+}
+
+// Builds a spring client by default.
+openApiGenerate {
+    generatorName = 'spring'
+    inputSpec = "${rootDir}/openapi.yaml"
+    outputDir = "${buildDir}/generated"
+    apiPackage = 'org.openapitools.api'
+    invokerPackage = 'org.openapitools.invoker'
+    modelPackage = 'org.openapitools.model'
+    configOptions = [
+        dateLibrary: 'java8'
+    ]
+    systemProperties = [
+        modelDocs: 'false'
+    ]
+    skipValidateSpec = true
+    logToStderr = true
+    generateAliasAsModel = false
+}
+
+dependencies {
+    // for type inference
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.8'
+    testCompileOnly 'org.projectlombok:lombok:1.18.8'
+
+    // for logging
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+
+    // dependencies by requiring openapi-generator generated code
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.9.8'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
+    // spring boot with jetty
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '2.2.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.1.RELEASE'
+
+    // openapi generator
+    compile group: 'org.openapitools', name: 'jackson-databind-nullable', version: '0.1.0'
+
+    implementation 'com.google.guava:guava:27.0.1-jre'
+    testImplementation 'junit:junit:4.12'
+}
+
+compileJava.dependsOn tasks.openApiValidate, tasks.openApiGenerate
+sourceSets.main.java.srcDir "${openApiGenerate.outputDir.get()}/src/main/java"
+sourceSets.main.resources.srcDir "${openApiGenerate.outputDir.get()}/src/main/resources"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+mainClassName = 'com.example.springboot.ServerMain'
+
+// for debugging
+tasks.withType(JavaExec) {
+    if (System.getProperty('DEBUG', 'false') == 'true') {
+        jvmArgs '-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005'
+    }
+}
