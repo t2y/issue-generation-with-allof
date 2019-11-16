@@ -2,6 +2,9 @@
 
 sample code to consider an issue with allof settings
 
+* https://github.com/OpenAPITools/openapi-generator/issues/2845
+* https://github.com/OpenAPITools/openapi-generator/issues/3100
+
 ## How to build
 
 to generate source code with open-generator from [openapi.yaml](openapi.yaml)
