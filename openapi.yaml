@@ -4,7 +4,7 @@ info:
   description: 'Sample code to confirm allof issue'
   version: 1.0.0
 paths:
-  /:
+  /pet:
     get:
       responses:
         200:
@@ -13,6 +13,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Pet'
+
+  /pet/cat:
+    get:
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cat'
+
+  /pet/dog:
+    get:
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
 
 components:
   schemas:
@@ -23,6 +43,11 @@ components:
           type: string
         age:
           type: integer
+        petType:
+          type: string
+      discriminator:
+        propertyName: petType
+
     Cat:
       allOf:
       - $ref: '#/components/schemas/Pet'
@@ -31,6 +56,7 @@ components:
         properties:
           house:
             type: string
+
     Dog:
       allOf:
       - $ref: '#/components/schemas/Pet'
@@ -39,11 +65,3 @@ components:
         properties:
           bark:
             type: string
-    Lizard:
-      allOf:
-      - $ref: '#/components/schemas/Pet'
-      - type: object
-        # all other properties specific to a `Lizard`
-        properties:
-          lovesRocks:
-            type: boolean

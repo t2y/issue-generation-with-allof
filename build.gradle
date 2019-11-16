@@ -23,12 +23,6 @@ configurations {
     compile.exclude module: 'spring-boot-starter-tomcat'
 }
 
-openApiMeta {
-    generatorName = 'Sample'
-    packageName = 'org.openapitools'
-    outputFolder = "${buildDir}/meta"
-}
-
 openApiValidate {
     inputSpec = "${rootDir}/openapi.yaml"
 }
