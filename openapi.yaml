@@ -43,10 +43,11 @@ components:
           type: string
         age:
           type: integer
-        petType:
-          type: string
       discriminator:
         propertyName: petType
+        mapping:
+          myDog: Dog
+          myCat: Cat
 
     Cat:
       allOf:
