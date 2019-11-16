@@ -32,6 +32,7 @@ openApiGenerate {
     generatorName = 'spring'
     inputSpec = "${rootDir}/openapi.yaml"
     outputDir = "${buildDir}/generated"
+    //templateDir = "${rootDir}/templates"
     apiPackage = 'org.openapitools.api'
     invokerPackage = 'org.openapitools.invoker'
     modelPackage = 'org.openapitools.model'
