@@ -21,7 +21,7 @@ $ gradle bootRun
 ```bash
 $ curl -s localhost:8080/pet | jq .
 {
-  "petType": null,
+  "petType": "Pet",
   "name": "kuro",
   "age": 1
 }
@@ -30,7 +30,7 @@ $ curl -s localhost:8080/pet | jq .
 ```bash
 $ curl -s localhost:8080/pet/cat | jq .
 {
-  "petType": null,
+  "petType": "myCat",
   "name": "kuro",
   "age": 1,
   "house": "myhome"
@@ -40,7 +40,7 @@ $ curl -s localhost:8080/pet/cat | jq .
 ```bash
 $ curl -s localhost:8080/pet/dog | jq .
 {
-  "petType": null,
+  "petType": "myDog",
   "name": "kuro",
   "age": 1,
   "bark": "bowwow"
